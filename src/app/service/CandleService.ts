@@ -7,7 +7,7 @@ import {Candle} from '../models/Candle';
   providedIn: 'root'
 })
 export class CandleService {
-  private baseUrl = 'http://localhost:8080/api/trade/candle';
+  private baseUrl = 'https://62ce83e578c1.ngrok-free.app/api/trade/candle';
 
   constructor(private http: HttpClient) {}
 
