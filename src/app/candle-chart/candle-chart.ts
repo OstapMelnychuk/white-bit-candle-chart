@@ -89,6 +89,29 @@ export class CandleChart implements OnInit, AfterViewInit {
     }));
   }
 
+  private formatPrice(value: any): string {
+    if (value == null) return '';
+    // Accept strings or numbers
+    const num = Number(value);
+    if (!isFinite(num)) return String(value);
+
+    const abs = Math.abs(num);
+
+    // Choose fraction digits:
+    // - large numbers (>= 1) -> 2 decimals
+    // - small numbers (< 1) -> up to 8 decimals to preserve precision
+    // - zero -> "0"
+    if (num === 0) return '0';
+
+    const fractionDigits = abs >= 1 ? 2 : Math.min(8, Math.max(2, Math.ceil(-Math.log10(abs)) + 1));
+
+    // Format with fixed fraction digits then strip unnecessary zeros
+    const fixed = num.toFixed(fractionDigits);
+
+    // Remove trailing zeros and optional trailing dot
+    return fixed.replace(/\.?0+$/, '');
+  }
+
   private initChartOptions() {
     this.chartOptions = {
       series: [
@@ -99,16 +122,29 @@ export class CandleChart implements OnInit, AfterViewInit {
         type: 'candlestick',
         height: 700,
         toolbar: { show: true },
-        zoom: { enabled: true, type: 'x', autoScaleYaxis: false } // keep zoom scale fixed
+        zoom: { enabled: true, type: 'x', autoScaleYaxis: false }
       },
-      theme: {
-        mode: 'dark'
-      },
+      theme: { mode: 'dark' },
       xaxis: { type: 'datetime', labels: { style: { colors: '#ccc' } } },
-      yaxis: { labels: { style: { colors: '#ccc' } }, tooltip: { enabled: true } },
+      yaxis: {
+        labels: {
+          style: { colors: '#ccc' },
+          // Apex passes value as number or string — coerce and format
+          formatter: (value: any) => this.formatPrice(value)
+        },
+        tooltip: { enabled: true }
+      },
       title: { text: 'BTC_USDT – Candles + EMA', style: { color: '#fff' } },
       stroke: { width: [1, 2], curve: 'smooth' },
-      tooltip: { enabled: true, shared: true, intersect: false },
+      tooltip: {
+        enabled: true,
+        shared: true,
+        intersect: false,
+        y: {
+          // tooltip.y.formatter receives the value; accept any type
+          formatter: (value: any) => this.formatPrice(value)
+        }
+      },
       dataLabels: { enabled: false },
     };
   }
