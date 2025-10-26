@@ -1,0 +1,38 @@
+/* You can add global styles to this file, and also import other style files */
+/* global styles.css */
+* { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;           /* <-- no page scroll */
+  overscroll-behavior: none;  /* prevent overscroll glow on mobile */
+  background-color: #1e1e1e;
+  color: #e0e0e0;
+  font-family: Inter, system-ui, sans-serif;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;    /* full viewport */
+}
+
+/* header/footer fixed size */
+.header { flex: 0 0 auto; }
+.footer { flex: 0 0 auto; }
+
+/* main area fills remaining space and hides any overflow */
+.chart-section {
+  flex: 1 1 auto;
+  min-height: 0;         /* IMPORTANT to allow child to scroll internally if needed */
+  overflow: hidden;      /* hide internal overflow */
+}
+
+/* Ensure chart element fits exactly inside */
+app-candle-chart, apx-chart, #chart {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
