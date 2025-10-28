@@ -9,7 +9,7 @@ import { Candle } from '../models/Candle';
 
 @Injectable({ providedIn: 'root' })
 export class CandleWsService {
-  private socketUrl = 'https://600195826587.ngrok-free.app/ws/candles'; // your STOMP endpoint
+  private socketUrl = 'https://b68ce9830406.ngrok-free.app/ws/candles'; // your STOMP endpoint
   private client!: Client;
   private _candleUpdates = new BehaviorSubject<Candle | null>(null);
 
